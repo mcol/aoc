@@ -37,11 +37,10 @@ fn neighbours(nrows: usize, ncols: usize, node: (usize, usize)) -> Vec<(usize, u
 
 fn dijkstra(vals: &[Vec<u32>]) -> u32 {
     let (nrows, ncols) = (vals.len(), vals[0].len());
-    let mut queued = BinaryHeap::new();
-    queued.push(Node {
+    let mut queued = BinaryHeap::from([Node {
         node: (0, 0),
         dist: 0,
-    });
+    }]);
     let mut dists = vec![vec![u32::MAX; ncols]; nrows];
     dists[0][0] = 0;
 
@@ -62,13 +61,14 @@ fn dijkstra(vals: &[Vec<u32>]) -> u32 {
 pub fn day15() {
     let input = "data/input-15.txt";
     let file = fs::read_to_string(input).unwrap();
+    let vals: Vec<_> = file
+        .lines()
+        .map(|z| z.chars().filter_map(|zz| zz.to_digit(10)).collect())
+        .collect();
 
-    let mut vals = Vec::new();
-    for line in file.lines() {
-        let digits: Vec<u32> = line.chars().map(|z| z.to_digit(10).unwrap()).collect();
-        vals.push(digits);
-    }
-    println!("Part 1: {}", dijkstra(&vals));
+    let res = dijkstra(&vals);
+    println!("Part 1: {res}");
+    assert_eq!(res, 769);
 
     let (nrows, ncols) = (vals.len(), vals[0].len());
     let mut vals_5 = vec![vec![0; ncols * 5]; nrows * 5];
@@ -85,5 +85,7 @@ pub fn day15() {
             }
         }
     }
-    println!("Part 2: {}", dijkstra(&vals_5));
+    let res = dijkstra(&vals_5);
+    println!("Part 2: {res}");
+    assert_eq!(res, 2963);
 }

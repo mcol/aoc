@@ -308,8 +308,9 @@ pub fn day19() {
             priority.push(*prio);
         }
     }
-    println!("Part 1: {}", s0.len());
-    assert_eq!(s0.len(), 362);
+    let res = s0.len();
+    println!("Part 1: {res}");
+    assert_eq!(res, 362);
 
     let mut dist = 0;
     for val0 in &scanner_pos {
@@ -317,6 +318,6 @@ pub fn day19() {
             dist = i32::max(dist, (*val0 - *val1).manhattan());
         }
     }
-    println!("Part 2: {}", dist);
+    println!("Part 2: {dist}");
     assert_eq!(dist, 12204);
 }

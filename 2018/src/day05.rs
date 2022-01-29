@@ -8,10 +8,7 @@ fn react(polymer: &str, skip: char) -> String {
         }
         if char.eq_ignore_ascii_case(&last) && char != last {
             reacted.pop();
-            last = match reacted.last() {
-                Some(&c) => c,
-                None => ' ',
-            };
+            last = reacted.last().map_or(' ', |&z| z);
             continue;
         }
         reacted.push(char);

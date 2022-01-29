@@ -2,20 +2,20 @@ use std::collections::HashSet;
 use std::fs;
 
 fn manhattan(a: &[i32], b: &[i32]) -> i32 {
-    (a[0] - b[0]).abs() + (a[1] - b[1]).abs()
+    (a[0].abs_diff(b[0]) + a[1].abs_diff(b[1])) as i32
 }
 
 pub fn day06() {
     let input = "data/input-06.txt";
     let file = fs::read_to_string(input).unwrap();
-    let mut coords = Vec::new();
-    for line in file.lines() {
-        let line: Vec<_> = line
-            .split(", ")
-            .map(|z| z.parse::<i32>().unwrap())
-            .collect();
-        coords.push(line);
-    }
+    let coords: Vec<_> = file
+        .lines()
+        .map(|line| {
+            line.split(", ")
+                .map(|z| z.parse::<i32>().unwrap())
+                .collect::<Vec<_>>()
+        })
+        .collect();
     let range = |acc: &[i32], val: i32| [i32::min(acc[0], val), i32::max(acc[1], val)];
     let [min_row, max_row] = coords
         .iter()

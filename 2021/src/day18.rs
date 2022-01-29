@@ -27,9 +27,7 @@ impl Tree {
     }
     fn add(&mut self, other: &Tree) {
         self.nodes.extend(other.nodes.clone());
-        for val in &mut self.nodes {
-            val.depth += 1;
-        }
+        self.nodes.iter_mut().for_each(|z| z.depth += 1);
         self.reduce();
     }
     fn reduce(&mut self) {
@@ -109,10 +107,7 @@ impl Tree {
 pub fn day18() {
     let input = "data/input-18.txt";
     let file: String = fs::read_to_string(input).unwrap();
-    let mut vals = Vec::new();
-    for line in file.lines() {
-        vals.push(Tree::new(line));
-    }
+    let vals: Vec<_> = file.lines().map(Tree::new).collect();
 
     let mut sum = vals[0].clone();
     if vals.len() > 1 {
@@ -120,7 +115,9 @@ pub fn day18() {
             sum.add(val);
         }
     }
-    println!("Part 1: {}", sum.magnitude());
+    let res = sum.magnitude();
+    println!("Part 1: {res}");
+    assert_eq!(res, 4417);
 
     let mut max_sum = 0;
     for i in 0..vals.len() {
@@ -133,7 +130,8 @@ pub fn day18() {
             max_sum = i32::max(max_sum, sum.magnitude());
         }
     }
-    println!("Part 2: {}", max_sum);
+    println!("Part 2: {max_sum}");
+    assert_eq!(max_sum, 4796);
 }
 
 #[cfg(test)]

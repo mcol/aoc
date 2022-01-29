@@ -37,8 +37,8 @@ pub fn day11() {
         .lines()
         .map(|line| {
             line.chars()
-                .map(|z| z.to_digit(10).unwrap())
-                .collect::<Vec<u32>>()
+                .filter_map(|z| z.to_digit(10))
+                .collect::<Vec<_>>()
         })
         .collect();
 
@@ -78,10 +78,12 @@ pub fn day11() {
             }
         }
         if step == 100 {
-            println!("Part 1: {}", flashed);
+            println!("Part 1: {flashed}");
+            assert_eq!(flashed, 1661);
         }
         if flashing == nrows * ncols {
-            println!("Part 2: {}", step);
+            println!("Part 2: {step}");
+            assert_eq!(step, 334);
             break;
         }
     }

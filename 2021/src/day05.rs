@@ -2,17 +2,16 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fs;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash)]
 struct Point {
     x: i32,
     y: i32,
 }
-
 impl Point {
-    fn new(vals: Vec<&str>) -> Self {
+    fn new(vals: (&str, &str)) -> Self {
         Point {
-            x: vals[0].to_string().parse::<i32>().expect(""),
-            y: vals[1].to_string().parse::<i32>().expect(""),
+            x: vals.0.to_string().parse::<i32>().unwrap(),
+            y: vals.1.to_string().parse::<i32>().unwrap(),
         }
     }
 }
@@ -25,7 +24,6 @@ struct SteppedRange {
     y_targ: i32,
     y_step: i32,
 }
-
 impl SteppedRange {
     fn new(src: Point, dst: Point) -> Self {
         let x_step = match dst.x.cmp(&src.x) {
@@ -43,8 +41,8 @@ impl SteppedRange {
             y_curr: src.y,
             x_targ: dst.x + x_step,
             y_targ: dst.y + y_step,
-            x_step: x_step,
-            y_step: y_step,
+            x_step,
+            y_step,
         }
     }
 }
@@ -65,11 +63,9 @@ impl Iterator for SteppedRange {
 
 fn points_in_line(pair: (Point, Point)) -> Vec<Point> {
     let (src, dst) = pair;
-    let mut points = Vec::new();
-    for (xx, yy) in SteppedRange::new(src, dst) {
-        points.push(Point { x: xx, y: yy });
-    }
-    points
+    SteppedRange::new(src, dst)
+        .map(|(x, y)| Point { x, y })
+        .collect()
 }
 
 fn is_horizontal_or_vertical(pair: (Point, Point)) -> bool {
@@ -79,24 +75,17 @@ fn is_horizontal_or_vertical(pair: (Point, Point)) -> bool {
 
 fn is_diagonal(pair: (Point, Point)) -> bool {
     let (src, dst) = pair;
-    i32::abs(src.x - dst.x) == i32::abs(src.y - dst.y)
+    src.x.abs_diff(dst.x) == src.y.abs_diff(dst.y)
 }
 
 pub fn day05() {
     let input = "data/input-05.txt";
     let file = fs::read_to_string(input).unwrap();
-
     let (mut src, mut dst) = (Vec::new(), Vec::new());
     for line in file.lines() {
-        let mut first = true;
-        for token in line.split(" -> ") {
-            let ppp = Point::new(token.split(',').collect::<Vec<&str>>());
-            if first {
-                src.push(ppp);
-                first = false;
-            } else {
-                dst.push(ppp);
-            }
+        if let Some((fst, snd)) = line.split_once(" -> ") {
+            src.push(Point::new(fst.split_once(',').unwrap()));
+            dst.push(Point::new(snd.split_once(',').unwrap()));
         }
     }
 
@@ -105,28 +94,22 @@ pub fn day05() {
         let pair = (src[idx], dst[idx]);
         if is_horizontal_or_vertical(pair) {
             for point in points_in_line(pair) {
-                let val = match cover_p1.remove(&point) {
-                    Some(val) => val + 1,
-                    None => 1,
-                };
-                cover_p1.insert(point, val);
+                *cover_p1.entry(point).or_insert(0) += 1;
             }
         }
 
         if is_horizontal_or_vertical(pair) | is_diagonal(pair) {
             for point in points_in_line(pair) {
-                let val = match cover_p2.remove(&point) {
-                    Some(val) => val + 1,
-                    None => 1,
-                };
-                cover_p2.insert(point, val);
+                *cover_p2.entry(point).or_insert(0) += 1;
             }
         }
     }
 
     let res = cover_p1.values().into_iter().filter(|&z| *z > 1).count();
-    println!("Part 1: {}", res);
+    println!("Part 1: {res}");
+    assert_eq!(res, 5442);
 
     let res = cover_p2.values().into_iter().filter(|&z| *z > 1).count();
-    println!("Part 2: {}", res);
+    println!("Part 2: {res}");
+    assert_eq!(res, 19571);
 }

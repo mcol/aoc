@@ -17,24 +17,12 @@ fn fold(coords: HashSet<(i32, i32)>, along_x: bool, fold: i32) -> HashSet<(i32, 
 pub fn day13() {
     let input = "data/input-13.txt";
     let file = fs::read_to_string(input).unwrap();
-
     let (mut coords, mut folds) = (HashSet::new(), Vec::new());
     for line in file.lines() {
-        let split: Vec<&str> = line.split(',').collect();
-        match split.len() {
-            2 => {
-                let x = split[0].parse::<i32>().unwrap();
-                let y = split[1].parse::<i32>().unwrap();
-                coords.insert((x, y));
-            }
-            _ => {
-                let split: Vec<&str> = line.split('=').collect();
-                if split.len() == 2 {
-                    let axis = split[0][11..].to_owned();
-                    let value = split[1].parse::<i32>().unwrap();
-                    folds.push((axis, value));
-                }
-            }
+        if let Some((x, y)) = line.split_once(',') {
+            coords.insert((x.parse::<i32>().unwrap(), y.parse::<i32>().unwrap()));
+        } else if let Some((axis, value)) = line.split_once('=') {
+            folds.push((axis[11..].to_owned(), value.parse::<i32>().unwrap()));
         }
     }
 
@@ -49,10 +37,12 @@ pub fn day13() {
                 coords = fold(coords, false, value);
                 rows = value;
             }
-            _ => panic!("unreachable"),
+            _ => unreachable!(),
         };
         if !first_fold_done {
-            println!("Part 1: {}", coords.len());
+            let res = coords.len();
+            println!("Part 1: {res}");
+            assert_eq!(res, 720);
             first_fold_done = true;
         }
     }

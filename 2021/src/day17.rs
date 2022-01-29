@@ -34,20 +34,19 @@ pub fn day17() {
     let input = "data/input-17.txt";
     let file: String = fs::read_to_string(input)
         .unwrap()
+        .trim()
         .replace("target area: x=", "")
-        .replace(", y=", "|")
-        .replace("\n", "");
-    let split: Vec<_> = file.split("|").collect();
-    let x_tgt: Vec<_> = split[0]
-        .split("..")
-        .map(|z| z.parse::<i32>().unwrap())
-        .collect();
-    let y_tgt: Vec<_> = split[1]
-        .split("..")
-        .map(|z| z.parse::<i32>().unwrap())
-        .collect();
-    let x_tgt = x_tgt[0]..(x_tgt[1] + 1);
-    let y_tgt = y_tgt[0]..(y_tgt[1] + 1);
+        .replace(", y=", "|");
+    let (x_tgt, y_tgt) = file.split_once('|').unwrap();
+    let to_range = |range: &str| {
+        let parse_i32 = |v: &str| v.parse::<i32>().unwrap();
+        range
+            .split_once("..")
+            .map(|(v1, v2)| parse_i32(v1)..(parse_i32(v2) + 1))
+            .unwrap()
+    };
+    let x_tgt = to_range(x_tgt);
+    let y_tgt = to_range(y_tgt);
 
     let mut max_dy = 0;
     for dx in velocity_xrange(&x_tgt) {
@@ -57,7 +56,9 @@ pub fn day17() {
             }
         }
     }
-    println!("Part 1: {}", max_dy * (max_dy + 1) / 2);
+    let res = max_dy * (max_dy + 1) / 2;
+    println!("Part 1: {res}");
+    assert_eq!(res, 4278);
 
     let mut count = 0;
     for dx in velocity_xrange(&x_tgt).start..x_tgt.end {
@@ -67,5 +68,6 @@ pub fn day17() {
             }
         }
     }
-    println!("Part 2: {}", count);
+    println!("Part 2: {count}");
+    assert_eq!(count, 1994);
 }

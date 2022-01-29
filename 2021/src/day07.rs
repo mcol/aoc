@@ -2,35 +2,35 @@ use std::fs;
 
 pub fn day07() {
     let input = "data/input-07.txt";
-    let file = fs::read_to_string(input).unwrap().replace("\n", "");
-
-    let mut crabs = Vec::new();
-    for token in file.split(',') {
-        crabs.push(token.to_string().parse::<i32>().expect(""));
-    }
-
+    let crabs: Vec<_> = fs::read_to_string(input)
+        .unwrap()
+        .trim()
+        .split(',')
+        .map(|z| z.to_string().parse::<i32>().unwrap())
+        .collect();
     let (min, max) = (
         *crabs.iter().min().unwrap() as usize,
         *crabs.iter().max().unwrap() as usize,
     );
 
-    let mut min_cost = i32::MAX;
-    for pos in min..=max {
+    let min_cost = (min..=max).fold(i32::MAX, |acc, pos| {
         let cost = crabs.iter().map(|z| i32::abs(*z - pos as i32)).sum();
-        min_cost = i32::min(cost, min_cost);
-    }
-    println!("part 1: {}", min_cost);
+        i32::min(acc, cost)
+    });
+    println!("Part 1: {min_cost}");
+    assert_eq!(min_cost, 352707);
 
-    let mut min_cost = i32::MAX;
+    let mut min_cost = u32::MAX;
     for pos in min..=max {
         let cost = crabs
             .iter()
             .map(|z| {
-                let c = i32::abs(*z - pos as i32);
+                let c = z.abs_diff(pos as i32);
                 c * (c + 1) / 2
             })
             .sum();
-        min_cost = i32::min(cost, min_cost);
+        min_cost = u32::min(cost, min_cost);
     }
-    println!("part 2: {}", min_cost);
+    println!("Part 2: {min_cost}");
+    assert_eq!(min_cost, 95519693);
 }

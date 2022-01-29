@@ -6,14 +6,13 @@ struct Card {
     vert: Vec<i32>,
     left: i32,
 }
-
 impl Card {
     fn new(vals: Vec<i32>) -> Self {
         Card {
             left: vals.iter().sum(),
             horz: vec![0; 5],
             vert: vec![0; 5],
-            vals: vals,
+            vals,
         }
     }
     fn check(&mut self, val: i32) -> bool {
@@ -36,24 +35,21 @@ pub fn day04() {
 
     let (mut drawn, mut cards) = (Vec::new(), Vec::new());
     let mut vals = Vec::new();
-    let mut read_first_line = false;
-
-    for line in file.lines() {
-        if !read_first_line {
-            for token in line.split(",") {
-                drawn.push(token.to_string().parse::<i32>().expect(""));
+    for (idx, line) in file.lines().enumerate() {
+        if idx == 0 {
+            for token in line.split(',') {
+                drawn.push(token.to_string().parse::<i32>().unwrap());
             }
-            read_first_line = true;
             continue;
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             continue;
         }
-        for token in line.split(" ") {
-            if token.len() == 0 {
+        for token in line.split(' ') {
+            if token.is_empty() {
                 continue;
             }
-            vals.push(token.to_string().parse::<i32>().expect(""));
+            vals.push(token.to_string().parse::<i32>().unwrap());
         }
         if vals.len() == 25 {
             cards.push(Card::new(vals));
@@ -61,24 +57,25 @@ pub fn day04() {
         }
     }
 
-    let num_cards = cards.len();
-    let mut valid_card = vec![1; num_cards];
+    let mut valid_card = vec![1; cards.len()];
     let mut solved_part1 = false;
     'outer: for curr in drawn {
-        let mut idx = 0;
-        for card in &mut cards {
-            if (valid_card[idx] == 1) & card.check(curr) {
+        for (idx, card) in cards.iter_mut().enumerate() {
+            if (valid_card[idx] == 1) && card.check(curr) {
                 if !solved_part1 {
-                    println!("Part 1: {}", curr * card.left);
+                    let res = curr * card.left;
+                    println!("Part 1: {res}");
+                    assert_eq!(res, 10374);
                     solved_part1 = true;
                 }
                 valid_card[idx] = 0;
                 if valid_card.iter().sum::<i32>() == 0 {
-                    println!("Part 2: {}", curr * card.left);
+                    let res = curr * card.left;
+                    println!("Part 2: {res}");
+                    assert_eq!(res, 24742);
                     break 'outer;
                 }
             }
-            idx += 1;
         }
     }
 }

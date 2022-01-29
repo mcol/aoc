@@ -2,12 +2,12 @@ use std::fs;
 
 pub fn day06() {
     let input = "data/input-06.txt";
-    let file = fs::read_to_string(input).unwrap().replace("\n", "");
-
-    let mut vals = Vec::new();
-    for token in file.split(',') {
-        vals.push(token.to_string().parse::<i32>().expect(""));
-    }
+    let mut vals: Vec<_> = fs::read_to_string(input)
+        .unwrap()
+        .trim()
+        .split(',')
+        .map(|z| z.to_string().parse::<i32>().unwrap())
+        .collect();
     let orig = vals.clone();
 
     for _day in 1..=80 {
@@ -21,7 +21,9 @@ pub fn day06() {
         }
         vals.append(&mut new_vals);
     }
-    println!("Part 1: {}", vals.len());
+    let res = vals.len();
+    println!("Part 1: {res}");
+    assert_eq!(res, 365862);
 
     let mut states = [0u64; 9];
     for v in orig {
@@ -35,5 +37,7 @@ pub fn day06() {
         states[8] = s0;
         states[6] += s0;
     }
-    println!("Part 2: {:?}", states.iter().sum::<u64>());
+    let res = states.iter().sum::<u64>();
+    println!("Part 2: {res}");
+    assert_eq!(res, 1653250886439);
 }

@@ -18,11 +18,10 @@ struct Event {
 pub fn day04() {
     let input = "data/input-04.txt";
     let file = fs::read_to_string(input).unwrap().replace('[', "");
-    let mut lines = Vec::new();
-    for line in file.lines() {
-        let line: Vec<_> = line.split("] ").collect();
-        lines.push(line);
-    }
+    let mut lines: Vec<_> = file
+        .lines()
+        .map(|line| line.split("] ").collect::<Vec<_>>())
+        .collect();
     lines.sort_unstable();
 
     let mut events = Vec::<Event>::new();

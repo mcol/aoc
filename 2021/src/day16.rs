@@ -81,7 +81,7 @@ fn parse_operator(packets: &mut Vec<Packet>, vt: (usize, usize), code: &str) -> 
             }
             from
         }
-        _ => panic!(),
+        _ => unreachable!(),
     };
     packets.push(Packet {
         version: vt.0,
@@ -123,11 +123,15 @@ fn evaluate(packets: &[Packet]) -> usize {
 
 pub fn day16() {
     let input = "data/input-16.txt";
-    let hex: String = fs::read_to_string(input).unwrap().replace("\n", "");
+    let hex: String = fs::read_to_string(input).unwrap().replace('\n', "");
     let bin: String = hex.chars().map(to_binary).collect();
 
     let packets = parse(&bin[..]);
-    println!("Part 1: {}", packets.iter().fold(0, |acc, z| acc + z.version));
+    let res = packets.iter().map(|z| z.version).sum::<usize>();
+    println!("Part 1: {res}");
+    assert_eq!(res, 996);
 
-    println!("Part 2: {}", evaluate(&packets));
+    let res = evaluate(&packets);
+    println!("Part 2: {res}");
+    assert_eq!(res, 96257984154);
 }

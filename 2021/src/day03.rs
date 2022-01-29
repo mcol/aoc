@@ -4,54 +4,46 @@ use std::fs;
 pub fn day03() {
     let input = "data/input-03.txt";
     let size = if input.contains("example") { 5 } else { 12 };
-
-    // read the contents of the file
     let file = fs::read_to_string(input).unwrap();
-    let mut vecs = Vec::new();
-    for line in file.lines() {
-        let vals: Vec<u32> = line
-            .chars()
-            .collect::<Vec<char>>()
-            .into_iter()
-            .map(|z| z.to_digit(10).unwrap())
-            .collect();
-        vecs.push(vals);
-    }
-
-    let mut sums = vec![0; size];
-    for vals in &vecs {
-        for idx in 0..size {
-            sums[idx] += vals[idx];
-        }
-    }
+    let vecs: Vec<_> = file
+        .lines()
+        .map(|line| {
+            line.chars()
+                .filter_map(|z| z.to_digit(10))
+                .collect::<Vec<_>>()
+        })
+        .collect();
+    let sums: Vec<_> = vecs.iter().fold(vec![0; size], |acc, z| {
+        acc.iter().zip(z.iter()).map(|(v1, v2)| v1 + v2).collect()
+    });
 
     let (mut gamma, mut epsilon) = (0, 0);
     let half = vecs.len() as u32 / 2;
-    for idx in 0..size {
-        if sums[idx] > half {
+    for (idx, &sum) in sums.iter().enumerate() {
+        if sum > half {
             gamma += i32::pow(2, (size - 1 - idx) as u32);
         } else {
             epsilon += i32::pow(2, (size - 1 - idx) as u32);
         }
     }
-    println!("Part 1: {}", gamma * epsilon);
+    let res = gamma * epsilon;
+    println!("Part 1: {res}");
+    assert_eq!(res, 2972336);
 
     let oxy = find_oxy_co2(&vecs, size, true);
     let co2 = find_oxy_co2(&vecs, size, false);
-    println!("Part 2: {}", oxy * co2);
+    let res = oxy * co2;
+    println!("Part 2: {res}");
+    assert_eq!(res, 3368358);
 }
 
-fn find_oxy_co2(vecs: &Vec<Vec<u32>>, size: usize, is_oxy: bool) -> i32 {
-    let mut keep = HashSet::new();
-    for idx in 0..vecs.len() {
-        keep.insert(idx);
-    }
-
+fn find_oxy_co2(vecs: &[Vec<u32>], size: usize, is_oxy: bool) -> i32 {
+    let mut keep: HashSet<_> = (0..vecs.len()).collect();
     for idx in 0..size {
         let mut sum = 0;
-        for num in 0..vecs.len() {
+        for (num, vals) in vecs.iter().enumerate() {
             if keep.contains(&num) {
-                sum += vecs[num][idx];
+                sum += vals[idx];
             }
         }
         let val = if sum as f32 >= keep.len() as f32 / 2. {
@@ -70,13 +62,10 @@ fn find_oxy_co2(vecs: &Vec<Vec<u32>>, size: usize, is_oxy: bool) -> i32 {
         }
     }
 
-    let idx: usize = *keep.iter().collect::<Vec<&usize>>()[0];
-    let val = &vecs[idx];
-    let mut res = 0;
-    for idx in 0..size {
-        if val[idx] == 1 {
-            res += i32::pow(2, (size - 1 - idx) as u32);
-        }
-    }
-    return res;
+    let idx = keep.drain().collect::<Vec<_>>()[0];
+    vecs[idx]
+        .iter()
+        .enumerate()
+        .map(|(idx, &val)| i32::pow(2, (size - 1 - idx) as u32) * val as i32)
+        .sum()
 }

@@ -90,12 +90,12 @@ pub fn day22() {
     let res = build_cube(&bounded_instructions)
         .iter()
         .fold(0, |acc, (cube, &count)| acc + cube.volume() * count as i64);
-    println!("Part 1: {}", res);
+    println!("Part 1: {res}");
     assert_eq!(res, 570915);
 
     let res = build_cube(&instructions)
         .iter()
         .fold(0, |acc, (cube, &count)| acc + cube.volume() * count as i64);
-    println!("Part 2: {}", res);
+    println!("Part 2: {res}");
     assert_eq!(res, 1268313839428137);
 }

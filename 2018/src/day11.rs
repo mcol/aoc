@@ -42,7 +42,7 @@ pub fn day11() {
     let input = "data/input-11.txt";
     let serialno = fs::read_to_string(input)
         .unwrap()
-        .replace('\n', "")
+        .trim()
         .parse::<usize>()
         .unwrap();
     let grid_size = 300;

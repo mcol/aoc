@@ -67,7 +67,6 @@ fn dirac(memo: &mut HashMap<Universe, usize>, uni: &Universe) -> usize {
 pub fn day21() {
     let input = "data/input-21.txt";
     let file: String = fs::read_to_string(input).unwrap();
-
     let mut position = Vec::new();
     for line in file.lines() {
         let val = line.split(' ').last().unwrap();
@@ -79,11 +78,11 @@ pub fn day21() {
         universe.play(universe.player, die.roll());
     }
     let res = universe.score.iter().min().unwrap() * die.rolls;
-    println!("Part 1: {}", res);
+    println!("Part 1: {res}");
     assert_eq!(res, 711480);
 
     let mut memo = HashMap::new();
     let wins = dirac(&mut memo, &Universe::new(&position));
-    println!("Part 2: {}", wins);
+    println!("Part 2: {wins}");
     assert_eq!(wins, 265845890886828);
 }

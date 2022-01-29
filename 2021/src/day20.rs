@@ -92,10 +92,12 @@ pub fn day20() {
         image = enhanced;
         outside = enhance[outside as usize * 511];
         if iter == 2 {
-            println!("Part 1: {}", image.len());
-            assert_eq!(image.len(), 5065);
+            let res = image.len();
+            println!("Part 1: {res}");
+            assert_eq!(res, 5065);
         }
     }
-    println!("Part 2: {}", image.len());
-    assert_eq!(image.len(), 14790);
+    let res = image.len();
+    println!("Part 2: {res}");
+    assert_eq!(res, 14790);
 }

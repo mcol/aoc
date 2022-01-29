@@ -15,7 +15,7 @@ pub fn day10() {
     let file = fs::read_to_string(input).unwrap();
     let signs: Vec<_> = file
         .lines()
-        .map(|line| line.chars().collect::<Vec<char>>())
+        .map(|line| line.chars().collect::<Vec<_>>())
         .collect();
 
     let (mut scores_p1, mut scores_p2) = (Vec::new(), Vec::new());
@@ -47,8 +47,12 @@ pub fn day10() {
         scores_p2.push(val);
     }
 
-    println!("Part 1: {}", scores_p1.iter().sum::<i32>());
+    let res = scores_p1.iter().sum::<i32>();
+    println!("Part 1: {res}");
+    assert_eq!(res, 366027);
 
     scores_p2.sort_unstable();
-    println!("Part 2: {:?}", scores_p2[scores_p2.len() / 2]);
+    let res = scores_p2[scores_p2.len() / 2];
+    println!("Part 2: {res}");
+    assert_eq!(res, 1118645287);
 }
