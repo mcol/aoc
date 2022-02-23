@@ -6,6 +6,7 @@ mod day03;
 mod day04;
 mod day05;
 mod day06;
+mod day07;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,6 +21,7 @@ fn main() {
         4 => day04::day04(),
         5 => day05::day05(),
         6 => day06::day06(),
+        7 => day07::day07(),
         day @ 1..=25 => println!("Day {day} not solved yet"),
         _ => println!("Day must be between 1 and 25"),
     }
