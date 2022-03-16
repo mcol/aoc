@@ -30,4 +30,3 @@ seti 7 2 4
 eqrr 5 0 3
 addr 3 4 4
 seti 5 1 4
-

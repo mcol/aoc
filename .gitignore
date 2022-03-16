@@ -1,1 +1,7 @@
+*~
 */target
+__pycache__
+
+# ignore nim binary files
+*/nim/*
+!*.nim

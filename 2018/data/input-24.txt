@@ -21,4 +21,3 @@ Infection:
 1541 units each with 49751 hit points (weak to cold, bludgeoning) with an attack that does 62 slashing damage at initiative 19
 3270 units each with 22736 hit points with an attack that does 13 slashing damage at initiative 10
 1211 units each with 56258 hit points (immune to slashing, cold) with an attack that does 73 bludgeoning damage at initiative 11
-
