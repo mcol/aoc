@@ -20,7 +20,7 @@ rock.type <- function(target, depth) {
   return(map)
 }
 
-input <- readLines("../data/input-22.txt")
+input <- readLines("data/input-22.txt")
 depth <- as.integer(gsub("depth: ", "", input[1]))
 target <- as.integer(unlist(strsplit(gsub("target: ", "", input[2]), ","))) + 1
 

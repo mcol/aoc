@@ -57,7 +57,7 @@ move.cart <- function(track, cart) {
   return(cart)
 }
 
-input.file <- "../data/input-13.txt"
+input.file <- "data/input-13.txt"
 tracks <- readLines(input.file)
 num.rows <- length(tracks)
 num.cols <- nchar(tracks[1])

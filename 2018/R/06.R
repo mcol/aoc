@@ -1,40 +1,32 @@
+library(data.table)
+
 manhattan <- function(a, b) {
-  sum(abs(a - b))
+  colSums(abs(a - t(b)))
 }
 
-coords <- read.table("../data/input-06.txt", sep=",", col.names=c("col", "row"))
-range.row <- range(coords$row) + c(-1, 1)
-range.col <- range(coords$col) + c(-1, 1)
-seq.row <- range.row[1]:range.row[2]
-seq.col <- range.col[1]:range.col[2]
-coords <- as.matrix(coords[, 2:1])
-
-dists <- matrix(Inf, length(seq.row), length(seq.col))
-owner <- matrix(NA, length(seq.row), length(seq.col))
-region <- matrix(FALSE, length(seq.row), length(seq.col))
-for (row in seq_along(seq.row)) {
-  for (col in seq_along(seq.col)) {
-    tot.dist <- 0
-    for (idx in 1:nrow(coords)) {
-      dist <- manhattan(c(seq.row[row], seq.col[col]), coords[idx, ])
-      tot.dist <- tot.dist + dist
-      if (dist < dists[row, col]) {
-        dists[row, col] <- dist
-        owner[row, col] <- idx
-      }
-      else if (dist == dists[row, col]) {
-        owner[row, col] <- NA
-      }
+coords <- fread("data/input-06.txt", col.names=c("row", "col"))
+row.range <- coords[, range(row)]
+col.range <- coords[, range(col)]
+infinite <- rep(FALSE, nrow(coords))
+region.size <- 0
+owner <- rep(0, nrow(coords))
+for (row in row.range[1]:row.range[2]) {
+  for (col in col.range[1]:col.range[2]) {
+    dist <- manhattan(c(row, col), coords)
+    region.size <- region.size + (sum(dist) < 10000)
+    if (sum(dist == min(dist)) == 1) {
+      idx <- which.min(dist)
+      owner[idx] <- owner[idx] + 1
+      if (row %in% row.range || col %in% col.range)
+        infinite[idx] <- TRUE
     }
-    if (tot.dist < 10000)
-      region[row, col] <- TRUE
   }
 }
 
-infinite.owners <- unique(c(owner[c(1, nrow(owner)), ],
-                            owner[, c(1, ncol(owner))]))
-owner[owner %in% infinite.owners] <- NA
+res <- max(owner[!infinite])
+cat("Part 1: ", res, "\n")
+stopifnot(res == 3907)
 
-cat("Part 1: ", max(table(owner)), "\n")
-
-cat("Part 2: ", sum(region), "\n")
+cat("Part 2: ", region.size, "\n")
+stopifnot(region.size == 42036)
+tac <- Sys.time()

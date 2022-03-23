@@ -1,4 +1,4 @@
-gens <- scan("../data/input-14.txt", character(), quiet=TRUE)
+gens <- scan("data/input-14.txt", character(), quiet=TRUE)
 start.recipes <- c(3L, 7L)
 
 make.recipes <- function(start.recipes, gens) {

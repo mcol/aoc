@@ -85,7 +85,7 @@ distance.pf <- function(parent, idx) {
   return(dist)
 }
 
-map <- scan("../data/input-15.txt", character(), quiet=TRUE)
+map <- scan("data/input-15.txt", character(), quiet=TRUE)
 num.rows <- num.cols <- length(map)
 map <- chartr(".#EG", "0123", unlist(strsplit(map, "")))
 

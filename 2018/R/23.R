@@ -2,7 +2,7 @@ distance <- function(a, b) {
   rowSums(abs(a - rep(b, each=nrow(a))))
 }
 
-bots <- readLines("../data/input-23.txt")
+bots <- readLines("data/input-23.txt")
 bots <- as.integer(unlist(strsplit(gsub("pos=<|>| r=", "", bots), ",")))
 bots <- matrix(bots, ncol=4, byrow=TRUE)
 pos <- bots[, 1:3]

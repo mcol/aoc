@@ -5,7 +5,7 @@ draw.map <- function(map) {
   cat(map, "\n")
 }
 
-map <- readLines("../data/input-18.txt")
+map <- readLines("data/input-18.txt")
 num.x <- nchar(map[1]) + 2
 num.y <- length(map) + 2
 

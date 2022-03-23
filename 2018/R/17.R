@@ -12,7 +12,7 @@ draw.map <- function(map,  pos=NULL) {
   cat(mm, "\n")
 }
 
-clay <- readLines("../data/example-17b.txt")
+clay <- readLines("data/example-17b.txt")
 clay <- trimws(unlist(strsplit(clay, ",")))
 clay <- gsub("..", ":", clay, fixed=TRUE)
 clay <- data.frame(x=gsub("x=", "", grep("x", clay, value=TRUE)),

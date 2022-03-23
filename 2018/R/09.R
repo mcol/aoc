@@ -1,23 +1,14 @@
-num.players <- 468
-num.marbles <- 71843
-#num.players <- 9;  num.marbles <- 25
-#num.players <- 10; num.marbles <- 1618
-#num.players <- 13; num.marbles <- 7999
-#num.players <- 17; num.marbles <- 1104
-#num.players <- 21; num.marbles <- 6111
-#num.players <- 30; num.marbles <- 5807
-
 addMarble <- function(idx, prev) {
   marble <- new.env(parent=emptyenv())
   marble$idx <- idx
-  marble$succ <- marble
   if (is.null(prev)) {
+    marble$succ <- marble
     marble$prev <- marble
-  }
-  else {
+  } else {
+    succ <- prev$succ
+    marble$succ <- succ
     marble$prev <- prev
-    marble$succ <- prev$succ
-    prev$succ$prev <- marble
+    succ$prev <- marble
     prev$succ <- marble
     if (identical(prev$prev, prev))
       prev$prev <- marble
@@ -28,7 +19,6 @@ addMarble <- function(idx, prev) {
 delMarble <- function(marble) {
   marble$prev$succ <- marble$succ
   marble$succ$prev <- marble$prev
-  rm(marble)
 }
 
 printMarbles <- function(marble) {
@@ -44,22 +34,16 @@ printMarbles <- function(marble) {
 }
 
 find.score <- function(num.players, num.marbles) {
-  marble <- 0
   player <- 0
   scores <- rep(0, num.players)
-  marbles <- addMarble(marble, NULL)
-  current <- marbles
-
-  while (marble < num.marbles) {
-#    cat(player, ":", printMarbles(marbles[[1]]), "\n")
-    marble <- marble + 1
+  current <- addMarble(0, NULL)
+  for (marble in seq_len(num.marbles)) {
     player <- player %% num.players + 1
-    for (i in 1:2)
-      current <- current$succ
+    # cat(player, ":", printMarbles(current), "\n")
+    current <- current$succ$succ
     if (marble %% 23 == 0) {
-      for (i in 1:7)
+      for (i in 0:7)
         current <- current$prev
-      current <- current$prev
       scores[player] <- scores[player] + marble + current$idx
       delMarble(current)
     }
@@ -70,14 +54,17 @@ find.score <- function(num.players, num.marbles) {
   return(scores)
 }
 
+input <- scan("data/input-09.txt", what="", quiet=TRUE)
+num.players <- as.integer(input[1])
+num.marbles <- as.integer(input[7])
+
 tic <- Sys.time()
 scores <- find.score(num.players, num.marbles)
 cat("Part 1: ", max(scores), "\n")
-toc <- Sys.time()
-print(toc - tic)
+stopifnot(max(scores) == 385820)
+print(Sys.time() - tic)
 
-tic <- Sys.time()
 scores <- find.score(num.players, num.marbles * 100)
 cat("Part 2: ", max(scores), "\n")
-toc <- Sys.time()
-print(toc - tic)
+stopifnot(max(scores) == 3156297594)
+print(Sys.time() - tic)

@@ -1,4 +1,4 @@
-points <- readLines("../data/input-25.txt")
+points <- readLines("data/input-25.txt")
 points <- matrix(as.integer(unlist(strsplit(points, ","))), ncol=4, byrow=TRUE)
 
 distance <- function(a, b) {

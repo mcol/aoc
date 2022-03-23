@@ -64,7 +64,7 @@ opcodes <- list(addr=function(regs, A, B, C) {
                      }
                 )
 
-input <- readLines("../data/input-16.txt")
+input <- readLines("data/input-16.txt")
 input <- input[input != ""]
 input <- data.frame(matrix(input, ncol=3, byrow=TRUE), stringsAsFactors=FALSE)
 colnames(input) <- c("before", "instr", "after")
@@ -101,7 +101,7 @@ repeat {
   if (all(!is.na(final.opcodes)))
     break
 }
-input <- readLines("../data/input-16b.txt")
+input <- readLines("data/input-16b.txt")
 input <- lapply(strsplit(input, " "), as.integer)
 
 regs <- c(0, 0, 0, 0)
