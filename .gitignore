@@ -5,3 +5,6 @@ __pycache__
 # ignore nim binary files
 */nim/*
 !*.nim
+
+# ignore odin binary files
+*.bin
