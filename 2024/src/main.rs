@@ -1,6 +1,7 @@
 use std::env;
 
 mod day01;
+mod day02;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -10,6 +11,7 @@ fn main() {
     }
     match args[1].parse::<u8>().expect("positive integer required") {
         1 => day01::day01(),
+        2 => day02::day02(),
         day @ 1..=25 => println!("Day {day} not solved yet"),
         _ => println!("Day must be between 1 and 25"),
     }
