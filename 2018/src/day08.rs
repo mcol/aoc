@@ -6,7 +6,7 @@ struct NodeSummary<'a> {
     sum_meta: u16,
 }
 
-fn eval_node(vec: &[u16]) -> NodeSummary {
+fn eval_node(vec: &[u16]) -> NodeSummary<'_> {
     let (num_children, len_metadata) = (vec[0], vec[1]);
     let (mut children, mut sum_meta) = (Vec::new(), 0);
     let mut vec = vec.split_at(2).1;

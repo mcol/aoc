@@ -13,7 +13,7 @@ impl Card {
             left: vals.iter().sum(),
             horz: vec![0; 5],
             vert: vec![0; 5],
-            vals: vals,
+            vals,
         }
     }
     fn check(&mut self, val: i32) -> bool {
@@ -46,11 +46,11 @@ pub fn day04() {
             read_first_line = true;
             continue;
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             continue;
         }
         for token in line.split(" ") {
-            if token.len() == 0 {
+            if token.is_empty() {
                 continue;
             }
             vals.push(token.to_string().parse::<i32>().expect(""));
@@ -65,8 +65,7 @@ pub fn day04() {
     let mut valid_card = vec![1; num_cards];
     let mut solved_part1 = false;
     'outer: for curr in drawn {
-        let mut idx = 0;
-        for card in &mut cards {
+        for (idx, card) in cards.iter_mut().enumerate() {
             if (valid_card[idx] == 1) & card.check(curr) {
                 if !solved_part1 {
                     println!("Part 1: {}", curr * card.left);
@@ -78,7 +77,6 @@ pub fn day04() {
                     break 'outer;
                 }
             }
-            idx += 1;
         }
     }
 }

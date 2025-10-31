@@ -27,8 +27,8 @@ pub fn day03() {
 
     let (mut gamma, mut epsilon) = (0, 0);
     let half = vecs.len() as u32 / 2;
-    for idx in 0..size {
-        if sums[idx] > half {
+    for (idx, &val) in sums.iter().enumerate() {
+        if val > half {
             gamma += i32::pow(2, (size - 1 - idx) as u32);
         } else {
             epsilon += i32::pow(2, (size - 1 - idx) as u32);
@@ -41,7 +41,7 @@ pub fn day03() {
     println!("Part 2: {}", oxy * co2);
 }
 
-fn find_oxy_co2(vecs: &Vec<Vec<u32>>, size: usize, is_oxy: bool) -> i32 {
+fn find_oxy_co2(vecs: &[Vec<u32>], size: usize, is_oxy: bool) -> i32 {
     let mut keep = HashSet::new();
     for idx in 0..vecs.len() {
         keep.insert(idx);
@@ -49,9 +49,9 @@ fn find_oxy_co2(vecs: &Vec<Vec<u32>>, size: usize, is_oxy: bool) -> i32 {
 
     for idx in 0..size {
         let mut sum = 0;
-        for num in 0..vecs.len() {
+        for (num, val) in vecs.iter().enumerate() {
             if keep.contains(&num) {
-                sum += vecs[num][idx];
+                sum += val[idx];
             }
         }
         let val = if sum as f32 >= keep.len() as f32 / 2. {
@@ -73,10 +73,10 @@ fn find_oxy_co2(vecs: &Vec<Vec<u32>>, size: usize, is_oxy: bool) -> i32 {
     let idx: usize = *keep.iter().collect::<Vec<&usize>>()[0];
     let val = &vecs[idx];
     let mut res = 0;
-    for idx in 0..size {
-        if val[idx] == 1 {
+    for (idx, &val) in val.iter().enumerate() {
+        if val == 1 {
             res += i32::pow(2, (size - 1 - idx) as u32);
         }
     }
-    return res;
+    res
 }

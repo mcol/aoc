@@ -43,7 +43,7 @@ pub fn day14() {
         if iter == 10 || iter == 40 {
             let mut letter_count = HashMap::new();
             for (key, val) in vals.clone() {
-                let letter = key.chars().nth(0).unwrap();
+                let letter = key.chars().next().unwrap();
                 letter_count.entry(letter).or_insert(0);
                 letter_count.insert(letter, val + letter_count[&letter]);
             }

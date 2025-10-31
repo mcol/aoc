@@ -17,7 +17,7 @@ pub fn day01() {
     let mut incr = 0;
     for curr in vals.clone() {
         if curr > last {
-            incr = incr + 1;
+            incr += 1;
         }
         last = curr;
     }

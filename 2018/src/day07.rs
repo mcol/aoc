@@ -59,7 +59,7 @@ pub fn day07() {
     let (mut prec1, mut res) = (prec.clone(), String::new());
     while let Some((&task, _)) = prec1
         .iter()
-        .min_by_key(|(&k, v)| v.len() * 1000 + k as usize)
+        .min_by_key(|&(&k, ref v)| v.len() * 1000 + k as usize)
     {
         remove_task(&mut prec1, task);
         res.push(task);

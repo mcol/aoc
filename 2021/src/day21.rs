@@ -70,7 +70,7 @@ pub fn day21() {
 
     let mut position = Vec::new();
     for line in file.lines() {
-        let val = line.split(' ').last().unwrap();
+        let val = line.split(' ').next_back().unwrap();
         position.push(val.parse::<usize>().unwrap());
     }
 

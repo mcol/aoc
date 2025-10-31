@@ -59,7 +59,7 @@ pub fn day11() {
     let res = max_squares
         .iter()
         .enumerate()
-        .max_by_key(|(_, &(sum, _, _))| sum)
+        .max_by_key(|&(_, &(sum, _, _))| sum)
         .map(|(idx, (_, x, y))| format!("{x},{y},{}", idx + 1))
         .unwrap();
     println!("Part 2: {res}");

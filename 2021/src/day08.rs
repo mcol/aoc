@@ -2,7 +2,7 @@ use std::fs;
 
 fn split_order(patt: &str) -> String {
     let mut chars: Vec<char> = patt.chars().collect();
-    chars.sort_by(|a, b| a.cmp(b));
+    chars.sort();
     String::from_iter(chars)
 }
 
@@ -12,73 +12,54 @@ fn find_nums(patts: &Vec<Vec<String>>) -> Vec<Vec<&str>> {
         let mut nums = vec![""; 10];
         nums[1] = row
             .iter()
-            .filter(|z| z.len() == 2)
-            .map(|z| z)
-            .next()
+            .find(|z| z.len() == 2)
             .unwrap();
         nums[3] = row
             .iter()
-            .filter(|z| (z.len() == 5) & nums[1].chars().all(|zz| z.contains(zz)))
-            .next()
+            .find(|z| (z.len() == 5) & nums[1].chars().all(|zz| z.contains(zz)))
             .unwrap();
         nums[4] = row
             .iter()
-            .filter(|z| z.len() == 4)
-            .map(|z| z)
-            .next()
+            .find(|z| z.len() == 4)
             .unwrap();
         nums[7] = row
             .iter()
-            .filter(|z| z.len() == 3)
-            .map(|z| z)
-            .next()
+            .find(|z| z.len() == 3)
             .unwrap();
         nums[8] = row
             .iter()
-            .filter(|z| z.len() == 7)
-            .map(|z| z)
-            .next()
+            .find(|z| z.len() == 7)
             .unwrap();
         nums[9] = row
             .iter()
-            .filter(|z| (z.len() == 6) & nums[4].chars().all(|zz| z.contains(zz)))
-            .map(|z| z)
-            .next()
+            .find(|z| (z.len() == 6) & nums[4].chars().all(|zz| z.contains(zz)))
             .unwrap();
         nums[0] = row
             .iter()
-            .filter(|z| (z.len() == 6) & (z != &nums[9]) & nums[1].chars().all(|zz| z.contains(zz)))
-            .map(|z| z)
-            .next()
+            .find(|z| (z.len() == 6) & (z != &nums[9]) & nums[1].chars().all(|zz| z.contains(zz)))
             .unwrap();
         nums[5] = row
             .iter()
-            .filter(|z| (z.len() == 5) & (z != &nums[3]) & z.chars().all(|zz| nums[9].contains(zz)))
-            .map(|z| z)
-            .next()
+            .find(|z| (z.len() == 5) & (z != &nums[3]) & z.chars().all(|zz| nums[9].contains(zz)))
             .unwrap();
         nums[6] = row
             .iter()
-            .filter(|z| (z.len() == 6) & (z != &nums[0]) & (z != &nums[9]))
-            .next()
+            .find(|z| (z.len() == 6) & (z != &nums[0]) & (z != &nums[9]))
             .unwrap();
         nums[2] = row
             .iter()
-            .filter(|z| (z.len() == 5) & (z != &nums[3]) & (z != &nums[5]))
-            .map(|z| z)
-            .next()
+            .find(|z| (z.len() == 5) & (z != &nums[3]) & (z != &nums[5]))
             .unwrap();
         all_nums.push(nums);
     }
     all_nums
 }
 
-fn decode(nums: &Vec<&str>, codes: &Vec<String>) -> i32 {
+fn decode(nums: &Vec<&str>, codes: &[String]) -> i32 {
     let (mut sum, len_codes) = (0, codes.len());
-    for idx_code in 0..len_codes {
-        for idx_num in 0..nums.len() {
-            let val = nums[idx_num];
-            if codes[idx_code] == val {
+    for (idx_code, code) in codes.iter().enumerate() {
+        for (idx_num, &val) in nums.iter().enumerate() {
+            if code == val {
                 sum += idx_num as i32 * i32::pow(10, (len_codes - 1 - idx_code) as u32);
             }
         }
@@ -98,7 +79,7 @@ pub fn day08() {
             .next()
             .expect("")
             .split_whitespace()
-            .map(|z| split_order(z))
+            .map(split_order)
             .collect();
         patts.push(vals);
 
@@ -106,7 +87,7 @@ pub fn day08() {
             .next()
             .expect("")
             .split_whitespace()
-            .map(|z| split_order(z))
+            .map(split_order)
             .collect();
         codes.push(vals);
     }

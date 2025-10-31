@@ -33,7 +33,7 @@ pub fn day06() {
             let min_idx: Vec<_> = dist
                 .iter()
                 .enumerate()
-                .filter(|(_, &z)| z == *min_dist)
+                .filter(|&(_, z)| z == min_dist)
                 .map(|(idx, _)| idx)
                 .collect();
             if min_idx.len() == 1 {

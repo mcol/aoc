@@ -60,8 +60,8 @@ pub fn day04() {
         if event.state == State::Asleep {
             let idx = guards.iter().position(|&z| z == event.guard).unwrap();
             sleep[idx] += event.end_sleep - event.beg_sleep;
-            for ii in event.beg_sleep..event.end_sleep {
-                minutes[idx][ii] += 1usize;
+            for ii in minutes[idx].iter_mut().take(event.end_sleep).skip(event.beg_sleep) {
+                *ii += 1usize;
             }
         }
     }
@@ -70,7 +70,7 @@ pub fn day04() {
         let val = minute
             .iter()
             .enumerate()
-            .max_by_key(|(_, &val)| val)
+            .max_by_key(|&(_, val)| val)
             .unwrap();
         max_minute.push(val.0);
         max_times.push(*val.1);
@@ -78,7 +78,7 @@ pub fn day04() {
     let which_max = |vec: &[usize]| {
         vec.iter()
             .enumerate()
-            .max_by_key(|(_, &val)| val)
+            .max_by_key(|&(_, val)| val)
             .map(|(idx, _)| idx)
             .unwrap()
     };

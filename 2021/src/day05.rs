@@ -43,8 +43,8 @@ impl SteppedRange {
             y_curr: src.y,
             x_targ: dst.x + x_step,
             y_targ: dst.y + y_step,
-            x_step: x_step,
-            y_step: y_step,
+            x_step,
+            y_step,
         }
     }
 }
@@ -124,9 +124,9 @@ pub fn day05() {
         }
     }
 
-    let res = cover_p1.values().into_iter().filter(|&z| *z > 1).count();
+    let res = cover_p1.values().filter(|&z| *z > 1).count();
     println!("Part 1: {}", res);
 
-    let res = cover_p2.values().into_iter().filter(|&z| *z > 1).count();
+    let res = cover_p2.values().filter(|&z| *z > 1).count();
     println!("Part 2: {}", res);
 }

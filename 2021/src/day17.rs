@@ -21,7 +21,7 @@ fn velocity_xrange(x_tgt: &Range<i32>) -> Range<i32> {
     let dx_min = -1. + (f32::sqrt(1. + 8. * x_tgt.start as f32)) * 0.5;
     let dx_min = f32::ceil(dx_min) as i32;
     let (mut dx, mut dx_max) = (dx_min, 0);
-    while dx <= x_tgt.start as i32 {
+    while dx <= x_tgt.start {
         if x_tgt.contains(&(dx * (dx + 1) / 2)) {
             dx_max = dx;
         }
